@@ -97,7 +97,7 @@ function init() {
     }
 
     function switchPlayerTurn() {
-        if(winner||tie) {
+        if (winner || tie) {
             return
         }
         currentPlayer = (currentPlayer == 'X') ? 'O' : 'X'
@@ -109,6 +109,7 @@ function init() {
         currentPlayer = 'X'
         messageElm.textContent = 'Play'
         squareEls.forEach(cell => cell.textContent = '')
+        winner = false
         // updateBoard()
     }
 
