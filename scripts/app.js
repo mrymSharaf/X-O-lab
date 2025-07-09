@@ -33,21 +33,19 @@ function init() {
     }
 
     function updateMessage() {
-        if (winner == false && tie == false) {
-            messageElm.textContent = 'game is in process..'
-        }
-        else if (winner == false && tie == false) {
-            messageElm.textContent = 'It is a Tie '
-        }
-        else {
-            messageElm.textContent = `You Won!`
+        if (winner) {
+            messageElm.textContent = `${currentPlayer} Wins!`;
+        } else if (tie) {
+            messageElm.textContent = `It is a Tie`;
+        } else {
+            messageElm.textContent = `${currentPlayer}'s turn`;
         }
     }
 
 
     function handleClick(event) {
         const sqrIndex = event.target.id
-        if (board[sqrIndex] != '' || winner == true) {
+        if (board[sqrIndex] != '' || winner === true) {
             return
         }
         placePiece(sqrIndex)
@@ -63,6 +61,7 @@ function init() {
     }
 
     function checkForWinner() {
+        let wonRound = false
         for (let i = 0; i < winningCombos.length; i++) {
             const combo = winningCombos[i]
             const a = board[combo[0]]
@@ -72,17 +71,14 @@ function init() {
                 continue
             }
             if (a == b && b == c) {
-                winner = true
+                wonRound = true
             }
         }
 
-        if (winner) {
+        if (wonRound) {
+            // updateMessage()
             messageElm.textContent = `${currentPlayer} Wins!`
             winner = true
-        }
-        else if (board.includes('')) {
-            messageElm.textContent = `It is a Tie`
-            tie = true
         }
     }
 
@@ -90,11 +86,22 @@ function init() {
         if (winner == true) {
             return
         }
+        if (!board.includes('')) {
+            messageElm.textContent = `It is a Tie`
+            tie = true
+        }
+        else {
+            tie = false
+        }
+
     }
 
     function switchPlayerTurn() {
+        if(winner||tie) {
+            return
+        }
         currentPlayer = (currentPlayer == 'X') ? 'O' : 'X'
-        messageElm.textContent = `${currentPlayer}'s turn`
+        updateMessage()
     }
 
     function restartGame() {
